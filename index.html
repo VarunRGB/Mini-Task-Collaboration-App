@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mini Task Collaboration App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Mini Task Collaboration App</h1>
+  </header>
+
+  <main>
+    <section class="task-form">
+      <h2>Add a New Task</h2>
+      <form id="taskForm">
+        <input type="text" id="taskTitle" placeholder="Task Title" required>
+        <input type="date" id="taskDeadline" required>
+        <select id="taskPriority">
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+        <button type="submit">Add Task</button>
+      </form>
+    </section>
+
+    <section class="task-list">
+      <h2>Your Tasks</h2>
+      <ul id="taskContainer"></ul>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
