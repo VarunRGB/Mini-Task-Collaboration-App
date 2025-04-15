@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="admin_dashboard.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Admin Task Dashboard</h1>
+    <table id="taskTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Deadline</th>
+          <th>Priority</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    async function fetchTasks() {
+      const response = await fetch('get_tasks.php');
+      const tasks = await response.json();
+      const tbody = document.querySelector('#taskTable tbody');
+      tbody.innerHTML = '';
+      tasks.forEach(task => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${task.id}</td>
+          <td>${task.title}</td>
+          <td>${task.deadline}</td>
+          <td>${task.priority}</td>
+          <td><button onclick="deleteTask(${task.id})">Delete</button></td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    async function deleteTask(id) {
+      if (confirm("Are you sure you want to delete this task?")) {
+        const response = await fetch('delete_task.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+        const result = await response.json();
+        if (result.success) fetchTasks();
+        else alert("Failed to delete task.");
+      }
+    }
+
+    fetchTasks();
+  </script>
+</body>
+</html>
