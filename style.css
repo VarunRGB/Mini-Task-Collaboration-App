@@ -122,3 +122,56 @@ li {
 .task-table td .edit-btn:hover {
   background-color: #218838;
 }
+
+
+/* Fancy styled checkbox */
+td:nth-child(5) {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.checkbox-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding-left: 0;
+  position: relative;
+}
+
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkbox-container .checkmark {
+  height: 20px;
+  width: 20px;
+  background-color: #f1f1f1;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  position: relative;
+}
+
+.checkbox-container input:checked + .checkmark {
+  background-color: green;
+  border-color: green;
+}
+
+.checkbox-container .checkmark::after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkbox-container input:checked + .checkmark::after {
+  display: block;
+  left: 6px;
+  top: 2px;
+  width: 4px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}

@@ -45,16 +45,80 @@ function renderUserTasks(tasks) {
   taskList.innerHTML = '';
 
   tasks.forEach(task => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-          <td>${task.title}</td>
-          <td>${task.deadline}</td>
-          <td>${task.priority}</td>
-          <td><button class="edit-btn" onclick="editTask(${task.id})">Edit</button></td>
-      `;
-      taskList.appendChild(row);
+    const row = document.createElement('tr');
+
+    // Status column: simple black text
+    const statusText = task.status;
+
+    // Mark as Completed column: fancy checkbox
+    const markCompletedContent =
+      task.status === "Completed"
+        ? `<label class="checkbox-container">
+             <input type="checkbox" checked disabled>
+             <span class="checkmark"></span>
+           </label>`
+        : `<label class="checkbox-container">
+             <input type="checkbox" onchange="markCompleted(${task.id}, this)">
+             <span class="checkmark"></span>
+           </label>`;
+
+    row.innerHTML = `
+      <td>${task.title}</td>
+      <td>${task.deadline}</td>
+      <td>${task.priority}</td>
+      <td class="status-cell">${statusText}</td>
+      <td>${markCompletedContent}</td>
+      <td>
+        <button class="edit-btn" onclick="editTask(${task.id})">Edit</button>
+        <button class="delete-btn" onclick="deleteTask(${task.id})">Delete</button>
+      </td>
+    `;
+
+    taskList.appendChild(row);
   });
 }
+
+async function markCompleted(id, checkbox) {
+  const response = await fetch("update_status.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ task_id: id, status: "Completed" })
+  });
+
+  const result = await response.json();
+  if (result.success) {
+    checkbox.checked = true;
+    checkbox.disabled = true;
+
+    const row = checkbox.closest("tr");
+    const statusCell = row.querySelector(".status-cell");
+    if (statusCell) {
+      statusCell.textContent = "Completed";
+    }
+  } else {
+    alert(result.error || "Failed to update task status");
+    checkbox.checked = false;
+  }
+}
+
+function deleteTask(id) {
+  if (!confirm("Are you sure you want to delete this task?")) return;
+
+  fetch("delete_task_user.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ task_id: id }),
+  })
+  .then(response => response.json())
+  .then(result => {
+    if (result.success) {
+      fetchTasks();
+    } else {
+      alert(result.error || "Failed to delete task");
+    }
+  });
+}
+
 
 function editTask(id) {
   const row = [...document.querySelectorAll("#userTaskList tr")].find(r =>
