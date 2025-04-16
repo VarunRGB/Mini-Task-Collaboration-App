@@ -9,14 +9,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $role = $_POST['role'] ?? 'user';
 
     if ($name && $email && $password && $role) {
-        // Hash the password
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        // Prepare the insert
         $stmt = $pdo->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
         try {
             $stmt->execute([$name, $email, $hashedPassword, $role]);
-            // Redirect to login
             header("Location: ../public/login.html");
             exit();
         } catch (PDOException $e) {

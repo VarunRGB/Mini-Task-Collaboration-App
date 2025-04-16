@@ -1,8 +1,8 @@
 <?php
 $host = "localhost";
 $dbname = "mini_collab_app";
-$user = "root";  // your MySQL user
-$pass = "varun071005";      // your MySQL password
+$user = "root";  
+$pass = "varun071005";      
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
