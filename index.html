@@ -1,37 +1,53 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mini Task Collaboration App</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <header>
-    <h1>Mini Task Collaboration App</h1>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Dashboard - Mini Task Collaboration App</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h1 class="app-title">Mini Task Collaboration App</h1>
+      <button onclick="logout()" class="logout-button">Logout</button>
+    </header>
 
-  <main>
-    <section class="task-form">
-      <h2>Add a New Task</h2>
-      <form id="taskForm">
-        <input type="text" id="taskTitle" placeholder="Task Title" required>
-        <input type="date" id="taskDeadline" required>
-        <select id="taskPriority">
-          <option value="High">High</option>
-          <option value="Medium">Medium</option>
-          <option value="Low">Low</option>
-        </select>
-        <button type="submit">Add Task</button>
-      </form>
-    </section>
+    <main>
+      <section class="task-form">
+        <h2>Add a New Task</h2>
+        <form id="taskForm">
+          <input type="text" id="taskTitle" placeholder="Task Title" required />
+          <input type="date" id="taskDeadline" required />
+          <select id="taskPriority">
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+          <button type="submit">Add Task</button>
+        </form>
+      </section>
 
-    <section class="task-list">
-      <h2>Your Tasks</h2>
-      <ul id="taskContainer"></ul>
-    </section>
-  </main>
+      <section class="task-list">
+        
+          <h2>Your Tasks</h2>
+          <table class="task-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Deadline</th>
+                <th>Priority</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="userTaskList">
+              <!-- Tasks will be injected here by JS -->
+            </tbody>
+          </table>
+        
+      </section>
+    </main>
 
-  <script src="script.js"></script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>

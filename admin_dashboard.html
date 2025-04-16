@@ -4,11 +4,59 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="admin_dashboard.css" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    thead th {
+      background-color: #f5f5f5;
+      text-align: left;
+      padding: 10px;
+    }
+
+    tbody td {
+      padding: 12px 10px;
+    }
+
+    tbody tr {
+      background-color: #e7eef8;
+    }
+
+    .delete-btn {
+      background-color: #f44336;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      background-color: #d32f2f;
+    }
+  </style>
 </head>
 <body>
+  <header class="header">
+    <h1 class="app-title">Mini Task Collaboration App</h1>
+    <button onclick="logout()" class="logout-button">Logout</button>
+  </header>
+
   <div class="container">
-    <h1>Admin Task Dashboard</h1>
+    <h2>Admin Task Dashboard</h2>
     <table id="taskTable">
       <thead>
         <tr>
@@ -24,6 +72,11 @@
   </div>
 
   <script>
+    function logout() {
+      // Adjust this to your logout logic
+      window.location.href = "logout.php";
+    }
+
     async function fetchTasks() {
       const response = await fetch('get_tasks.php');
       const tasks = await response.json();
@@ -36,7 +89,7 @@
           <td>${task.title}</td>
           <td>${task.deadline}</td>
           <td>${task.priority}</td>
-          <td><button onclick="deleteTask(${task.id})">Delete</button></td>
+          <td><button class="delete-btn" onclick="deleteTask(${task.id})">Delete</button></td>
         `;
         tbody.appendChild(row);
       });
