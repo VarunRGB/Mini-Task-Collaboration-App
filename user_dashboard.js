@@ -1,8 +1,9 @@
-document.addEventListener("DOMContentLoaded", fetchTasks);
+let allTasks = [];
 
-document
-  .getElementById("taskForm")
-  .addEventListener("submit", async function (e) {
+document.addEventListener("DOMContentLoaded", async () => {
+  await fetchTasks();
+
+  document.getElementById("taskForm").addEventListener("submit", async function (e) {
     e.preventDefault();
 
     const title = document.getElementById("taskTitle").value;
@@ -18,39 +19,48 @@ document
     const result = await response.json();
     if (result.success) {
       document.getElementById("taskForm").reset();
-      fetchTasks();
+      await fetchTasks();
     } else {
       alert(result.error || "Failed to add task");
     }
   });
+});
 
-  async function fetchTasks() {
-    const response = await fetch("get_user_tasks.php");
-    const tasks = await response.json();
-  
-    if (Array.isArray(tasks)) {
-      renderUserTasks(tasks);
-    } else {
-      console.error("Unexpected task format", tasks);
-    }
+async function fetchTasks() {
+  const response = await fetch("get_user_tasks.php");
+  const tasks = await response.json();
+
+  if (Array.isArray(tasks)) {
+    allTasks = tasks;
+    applyFilters();
+  } else {
+    console.error("Unexpected task format", tasks);
   }
-  
+}
 
-function logout() {
-  window.location.href = "logout.php";
+function applyFilters() {
+  const status = document.getElementById("statusFilter").value;
+  const priority = document.getElementById("priorityFilter").value;
+  const deadline = document.getElementById("deadlineFilter").value;
+
+  const filteredTasks = allTasks.filter(task => {
+    const matchStatus = status === "All" || task.status === status;
+    const matchPriority = priority === "All" || task.priority === priority;
+    const matchDeadline = !deadline || task.deadline <= deadline;
+    return matchStatus && matchPriority && matchDeadline;
+  });
+
+  renderUserTasks(filteredTasks);
 }
 
 function renderUserTasks(tasks) {
-  const taskList = document.getElementById('userTaskList');
-  taskList.innerHTML = '';
+  const taskList = document.getElementById("userTaskList");
+  taskList.innerHTML = "";
 
   tasks.forEach(task => {
-    const row = document.createElement('tr');
-
-    // Status column: simple black text
+    const row = document.createElement("tr");
     const statusText = task.status;
 
-    // Mark as Completed column: fancy checkbox
     const markCompletedContent =
       task.status === "Completed"
         ? `<label class="checkbox-container">
@@ -58,7 +68,7 @@ function renderUserTasks(tasks) {
              <span class="checkmark"></span>
            </label>`
         : `<label class="checkbox-container">
-             <input type="checkbox" onchange="markCompleted(${task.id}, this)">
+             <input type="checkbox" onchange="markCompleted(${task.id}, this, event)">
              <span class="checkmark"></span>
            </label>`;
 
@@ -78,7 +88,9 @@ function renderUserTasks(tasks) {
   });
 }
 
-async function markCompleted(id, checkbox) {
+async function markCompleted(id, checkbox, event) {
+  event.stopPropagation(); // prevent bubbling
+
   const response = await fetch("update_status.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -95,11 +107,17 @@ async function markCompleted(id, checkbox) {
     if (statusCell) {
       statusCell.textContent = "Completed";
     }
+
+    const task = allTasks.find(t => t.id === id);
+    if (task) task.status = "Completed";
+
+    applyFilters();
   } else {
     alert(result.error || "Failed to update task status");
     checkbox.checked = false;
   }
 }
+
 
 function deleteTask(id) {
   if (!confirm("Are you sure you want to delete this task?")) return;
@@ -119,7 +137,6 @@ function deleteTask(id) {
   });
 }
 
-
 function editTask(id) {
   const row = [...document.querySelectorAll("#userTaskList tr")].find(r =>
     r.querySelector("button")?.getAttribute("onclick") === `editTask(${id})`
@@ -127,13 +144,11 @@ function editTask(id) {
 
   if (!row) return;
 
-  // Get current task values
-  const [titleCell, deadlineCell, priorityCell, actionCell] = row.children;
+  const [titleCell, deadlineCell, priorityCell, , , actionCell] = row.children;
   const currentTitle = titleCell.textContent;
   const currentDeadline = deadlineCell.textContent;
   const currentPriority = priorityCell.textContent;
 
-  // Replace row cells with input fields
   titleCell.innerHTML = `<input type="text" value="${currentTitle}" class="edit-title">`;
   deadlineCell.innerHTML = `<input type="date" value="${currentDeadline}" class="edit-deadline">`;
   priorityCell.innerHTML = `
@@ -149,11 +164,10 @@ function editTask(id) {
     <button class="cancel-btn" style="background-color: gray; color: white;">Cancel</button>
   `;
 
-  // Add event listeners
   const saveBtn = actionCell.querySelector(".save-btn");
   const cancelBtn = actionCell.querySelector(".cancel-btn");
 
-  cancelBtn.addEventListener("click", fetchTasks); // reset the table
+  cancelBtn.addEventListener("click", fetchTasks);
 
   saveBtn.addEventListener("click", async () => {
     const updatedTitle = titleCell.querySelector(".edit-title").value;
@@ -178,4 +192,8 @@ function editTask(id) {
       alert(result.error || "Failed to update task");
     }
   });
+}
+
+function logout() {
+  window.location.href = "logout.php";
 }

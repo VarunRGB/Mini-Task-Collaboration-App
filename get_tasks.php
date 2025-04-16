@@ -1,7 +1,13 @@
 <?php
 require 'db.php';
 
-$stmt = $pdo->query("SELECT * FROM tasks ORDER BY id DESC");
+$stmt = $pdo->query("
+  SELECT tasks.id, tasks.title, tasks.deadline, tasks.priority, tasks.status, users.name AS username
+  FROM tasks
+  JOIN users ON tasks.user_id = users.id
+  ORDER BY tasks.id DESC
+");
+
 $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 header('Content-Type: application/json');

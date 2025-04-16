@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Register</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="register.css" />
 </head>
 <body>
-  <main>
+  <div class="register-container">
     <h2>Create an Account</h2>
     <form action="register.php" method="POST">
       <input type="text" name="name" placeholder="Full Name" required />
@@ -19,7 +19,7 @@
       </select>
       <button type="submit">Register</button>
     </form>
-    <p>Already have an account? <a href="login.html">Login here</a></p>
-  </main>
+    <p class="login-link">Already have an account? <a href="login.html">Login here</a></p>
+  </div>
 </body>
 </html>
