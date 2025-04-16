@@ -1,6 +1,7 @@
 <?php
 session_start();
-require 'db.php';
+require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../db/db.php';
 
 header("Content-Type: application/json");
 
@@ -18,9 +19,4 @@ if (!$user_id) {
 $stmt = $pdo->prepare("INSERT INTO tasks (title, deadline, priority, user_id) VALUES (?, ?, ?, ?)");
 $success = $stmt->execute([$title, $deadline, $priority, $user_id]);
 
-if ($success) {
-    echo json_encode(["success" => true]);
-} else {
-    echo json_encode(["error" => "Failed to add task."]);
-}
-?>
+echo json_encode($success ? ["success" => true] : ["error" => "Failed to add task."]);

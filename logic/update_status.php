@@ -1,6 +1,7 @@
 <?php
 session_start();
-require 'db.php';
+require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../db/db.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
 $task_id = $data['task_id'];

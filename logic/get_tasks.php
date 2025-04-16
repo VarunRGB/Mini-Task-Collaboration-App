@@ -1,5 +1,6 @@
 <?php
-require 'db.php';
+require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../db/db.php';
 
 $stmt = $pdo->query("
   SELECT tasks.id, tasks.title, tasks.deadline, tasks.priority, tasks.status, users.name AS username

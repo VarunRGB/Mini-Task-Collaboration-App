@@ -1,9 +1,9 @@
 function logout() {
-  window.location.href = "logout.php";
+  window.location.href = "../auth/logout.php";
 }
 
 async function fetchTasks() {
-  const response = await fetch("get_tasks.php");
+  const response = await fetch("../logic/get_tasks.php");
   const tasks = await response.json();
   const tbody = document.querySelector("#taskTable tbody");
   const userSelect = document.getElementById("userFilter");
@@ -37,7 +37,7 @@ async function fetchTasks() {
 
 async function deleteTask(id) {
   if (confirm("Are you sure you want to delete this task?")) {
-    const response = await fetch("delete_task.php", {
+    const response = await fetch("../logic/delete_task.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id }),
@@ -54,7 +54,7 @@ function applyFilters() {
   const priority = document.getElementById("priorityFilter").value;
   const deadline = document.getElementById("deadlineFilter").value;
 
-  fetch("get_tasks.php")
+  fetch("../logic/get_tasks.php")
     .then((res) => res.json())
     .then((tasks) => {
       const filtered = tasks.filter((task) => {

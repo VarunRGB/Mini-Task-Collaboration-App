@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Dashboard - Mini Task Collaboration App</title>
-    <link rel="stylesheet" href="user_dashboard.css" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="styles/admin_dashboard.css" />
   </head>
   <body>
     <header class="header">
@@ -12,24 +12,17 @@
       <button onclick="logout()" class="logout-button">Logout</button>
     </header>
 
-    <main>
-      <section class="task-form">
-        <h2>Add a New Task</h2>
-        <form id="taskForm">
-          <input type="text" id="taskTitle" placeholder="Task Title" required />
-          <input type="date" id="taskDeadline" required />
-          <select id="taskPriority">
-            <option value="High">High</option>
-            <option value="Medium">Medium</option>
-            <option value="Low">Low</option>
-          </select>
-          <button type="submit">Add Task</button>
-        </form>
-      </section>
-
-      <section class="task-filters">
+    <div class="container">
+      <h2>Admin Task Dashboard</h2>
+      <div class="task-filters">
         <h3>Filter Tasks</h3>
         <div class="filter-group">
+          <div class="filter-item">
+            <label for="userFilter">User:</label>
+            <select id="userFilter">
+              <option value="All">All</option>
+            </select>
+          </div>
           <div class="filter-item">
             <label for="statusFilter">Status:</label>
             <select id="statusFilter">
@@ -38,7 +31,6 @@
               <option value="Completed">Completed</option>
             </select>
           </div>
-      
           <div class="filter-item">
             <label for="priorityFilter">Priority:</label>
             <select id="priorityFilter">
@@ -48,39 +40,32 @@
               <option value="Low">Low</option>
             </select>
           </div>
-      
           <div class="filter-item">
             <label for="deadlineFilter">Deadline Before:</label>
             <input type="date" id="deadlineFilter" />
           </div>
-      
           <div class="filter-item">
+            <label>&nbsp;</label>
             <button onclick="applyFilters()">Apply Filters</button>
           </div>
         </div>
-      </section>
+      </div>
       
+      <table id="taskTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Deadline</th>
+            <th>Priority</th>
+            <th>Progress</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
 
-      <section class="task-list">
-        <h2>Your Tasks</h2>
-        <table class="task-table">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Deadline</th>
-              <th>Priority</th>
-              <th>Status</th>
-              <th>Mark as Completed</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="userTaskList">
-            <!-- Tasks will be injected here by JS -->
-          </tbody>
-        </table>
-      </section>
-    </main>
-
-    <script src="user_dashboard.js"></script>
+    <script src="js/admin_dashboard.js"></script>
   </body>
 </html>

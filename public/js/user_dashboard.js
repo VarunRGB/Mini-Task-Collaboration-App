@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const deadline = document.getElementById("taskDeadline").value;
     const priority = document.getElementById("taskPriority").value;
 
-    const response = await fetch("add_task.php", {
+    const response = await fetch("../logic/add_task.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title, deadline, priority }),
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 async function fetchTasks() {
-  const response = await fetch("get_user_tasks.php");
+  const response = await fetch("../logic/get_user_tasks.php");
   const tasks = await response.json();
 
   if (Array.isArray(tasks)) {
@@ -91,7 +91,7 @@ function renderUserTasks(tasks) {
 async function markCompleted(id, checkbox, event) {
   event.stopPropagation(); // prevent bubbling
 
-  const response = await fetch("update_status.php", {
+  const response = await fetch("../logic/update_status.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ task_id: id, status: "Completed" })
@@ -122,7 +122,7 @@ async function markCompleted(id, checkbox, event) {
 function deleteTask(id) {
   if (!confirm("Are you sure you want to delete this task?")) return;
 
-  fetch("delete_task_user.php", {
+  fetch("../logic/delete_task_user.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ task_id: id }),
@@ -174,7 +174,7 @@ function editTask(id) {
     const updatedDeadline = deadlineCell.querySelector(".edit-deadline").value;
     const updatedPriority = priorityCell.querySelector(".edit-priority").value;
 
-    const response = await fetch("edit_task.php", {
+    const response = await fetch("../logic/edit_task.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -195,5 +195,5 @@ function editTask(id) {
 }
 
 function logout() {
-  window.location.href = "logout.php";
+  window.location.href = "../auth/logout.php";
 }

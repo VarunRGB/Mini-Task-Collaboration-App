@@ -1,5 +1,6 @@
 <?php
-require_once 'db.php'; // Make sure this is at the top
+require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../db/db.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $name = $_POST['name'] ?? '';
@@ -16,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         try {
             $stmt->execute([$name, $email, $hashedPassword, $role]);
             // Redirect to login
-            header("Location: login.html");
+            header("Location: ../public/login.html");
             exit();
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
